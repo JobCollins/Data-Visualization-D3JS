@@ -55,10 +55,12 @@
     let store = {}
 
     function loadData() { 
-        let promise = d3.csv('routes.csv')
-
-        return promise.then(routes => {
-            store.routes = routes
+        return Promise.all([
+            d3.csv('routes.csv'),
+            d3.json('countries.geo.json'),
+        ]).then(datasets => {
+            store.routes = datasets[0];
+            store.geoJSON = datasets[1]
             return store;
         })
     }
