@@ -105,7 +105,9 @@
         drawMap(store.geoJSON)
 
         let airports = groupByAirport(store.routes);
-        drawAirports(airports)
+        //drawAirports(airports)
+
+        drawRoutes('24')//Testing the draw function
     }
 
      loadData().then(showData);  
