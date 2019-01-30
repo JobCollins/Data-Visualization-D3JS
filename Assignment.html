@@ -339,19 +339,20 @@
                 let bindedData = container.selectAll("line")
                     .data(selectedRoutes, d => d.ID) //This seconf parameter tells D3 what to use to identify the routes, this hepls D3 to correctly find which routes have been added or removed.
                     //TODO: Use the .enter selector to append a line for each new route.
-                    .enter()
-                    //TODO: for each line set the start of the line (x1 and y1) to be the position of the source airport (SourceLongitude and SourceLatitude) Hint: you can use projection to convert longitude and latitude to x and y.
-                    .append('line')
-                    .attr('x1', d => projection([+d.SourceLongitude, +d.SourceLatitude])[0])
-                    .attr('y1', d => projection([+d.SourceLongitude, +d.SourceLatitude])[1])
-                    //TODO: for each line set the end of the line (x2 and y2) to be the position of the source airport (DestLongitude and DestLongitude)
-                    .attr('x2', d => projection([+d.DestLongitude, +d.DestLatitude])[0])
-                    .attr('y2', d => projection([+d.DestLongitude, +d.DestLatitude])[1])
-                    //TODO: set the color of the stroke of the line to "#992a2a"
-                    .style('stroke', '#992a2a')
-                    //TODO: set the opacity to 0.1
-                    .style('opacity', 0.1)
-                    .exit().remove()
+                bindedData.enter()
+                        //TODO: for each line set the start of the line (x1 and y1) to be the position of the source airport (SourceLongitude and SourceLatitude) Hint: you can use projection to convert longitude and latitude to x and y.
+                        .append('line')
+                        .attr('x1', d => projection([+d.SourceLongitude, +d.SourceLatitude])[0])
+                        .attr('y1', d => projection([+d.SourceLongitude, +d.SourceLatitude])[1])
+                        //TODO: for each line set the end of the line (x2 and y2) to be the position of the source airport (DestLongitude and DestLongitude)
+                        .attr('x2', d => projection([+d.DestLongitude, +d.DestLatitude])[0])
+                        .attr('y2', d => projection([+d.DestLongitude, +d.DestLatitude])[1])
+                        //TODO: set the color of the stroke of the line to "#992a2a"
+                        .style('stroke', '#992a2a')
+                        //TODO: set the opacity to 0.1
+                        .style('opacity', 0.1)
+
+                bindedData.exit().remove()
 
         //TODO: use exit function over bindedData to remove any routes that does not satisfy the filter.
     }
