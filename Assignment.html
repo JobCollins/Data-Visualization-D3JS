@@ -31,6 +31,11 @@
         .mainView{
             display: flex;
         }
+        #tooltip{
+            border: solid 1px black;
+            padding: 5px;
+            display:none;
+        }
     </style>
 
     <script src="d3.js"></script>
@@ -54,6 +59,7 @@
     //js code
     let store = {}
 
+
     function loadData() { 
         return Promise.all([
             d3.csv('routes.csv'),
@@ -67,7 +73,8 @@
 
     function groupByAirline(data) {
 
-        //Iterate over each route, producing a dictionary where the keys is are the ailines ids and the values are the information of the airline.
+        //Iterate over each route, producing a dictionary where the keys is are the ailines ids 
+        // and the values are the information of the airline.
         let result = data.reduce((result, d) => {
             let currentData = result[d.AirlineID] || {
                 "AirlineID": d.AirlineID,
@@ -168,7 +175,9 @@
         return { xScale, yScale }
     }
 
-    function drawBarsAirlinesChart(airlines, scales, config) {
+    var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
+    function drawBarsAirlinesChart(airlines, scales, config, airport) {
         let {margin, container} = config; //equivalent to 'let margin = config.margin; let container = config.container'
 
         let {xScale, yScale} = scales
@@ -191,6 +200,15 @@
             .on("mouseenter", function (d) { // <- this is the new code
                 //TODO: call the drawRoutes function passing the AirlineID id 'd'
                 drawRoutes(d.AirlineID)
+
+                tooltip
+                    .style("left", d3.event.pageX - 50 + "px")
+                    .style("top", d3.event.pageY - 70 + "px")
+                    .style("display", "inline-block")
+                    .html((d.AirlineName)
+                        + "<br> Airline ID: " + (d.AirlineID)
+                        + "<br> Source Airport: " + (d.SourceAirport)
+                        );
                 //TODO: change the fill color of the bar to "#992a5b" as a way to highlight the bar. Hint: use d3.select(this)
                 d3.select(this).attr('fill', '#992a5b')
             })
@@ -200,9 +218,11 @@
                 drawRoutes(null);
                 //TODO: change the fill color of the bar back to "#2a5599"
                 d3.select(this).attr('fill', '#2a5599')
+                d3.select('#tooltip').style('display','none')
                 
 
             })
+            
             
 
     }
@@ -353,6 +373,8 @@
                         .style('opacity', 0.1)
 
                 bindedData.exit().remove()
+
+                
 
         //TODO: use exit function over bindedData to remove any routes that does not satisfy the filter.
     }
